@@ -8,7 +8,7 @@ import path from 'path';
 dotenv.config();
 
 mongoose
-  .connect(process.env.MONGO_URL)
+  .connect('mongodb://localhost:27017')
   .then(() => {
     console.log('Connected to MongoDB-InfinityCluster0');
   })
