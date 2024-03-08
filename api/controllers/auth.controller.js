@@ -1,41 +1,67 @@
 import User from '../models/user.model.js';
-import bcryptjs from 'bcryptjs';
-import { errorHandler } from '../utils/error.js';
-import jwt from 'jsonwebtoken';
+import bcrypt from 'bcryptjs';
+// import { errorHandler } from '../utils/error.js';
+// import jwt from 'jsonwebtoken';
 
-export const signup = async (req, res, next) => {
-  const { username, email, password } = req.body;
-  const hashedPassword = bcryptjs.hashSync(password, 10);
-  const newUser = new User({ username, email, password: hashedPassword });
+export const signup = async(req, res) =>{
   try {
-    await newUser.save();
-    res.status(201).json({ message: 'User created successfully' });
+      const {username, organization, address, email, password} = req.body; 
+      
+      const user = await User.findOne({username});
+
+      if (user){
+          return res.status(400).json({error: "User already exists"});
+      }
+
+      //hash password
+      const salt = await bcrypt.genSalt(10);
+      const hashedPassword = await bcrypt.hash(password, salt);
+
+      const newUser = new User({
+          username,
+          organization,
+          address,
+          email,
+          password: hashedPassword,
+          
+      });
+      
+      await newUser.save();
+
+      res.status(201).json({
+          username: newUser.username,
+          organization: newUser.organization,
+          address:newUser.address,
+          email:newUser.email,
+          password: newUser.password,
+          //profilePic: newUser.profilePic,
+      })
+
   } catch (error) {
-    next(error);
+      console.log("Error in signup controller", error.message);
+      res.status(500).json({error: "Internal Server Error"});
   }
 };
 
-export const signin = async (req, res, next) => {
-  const { email, password } = req.body;
+
+export const login = async(req, res) =>{
   try {
-    const validUser = await User.findOne({ email });
-    if (!validUser) return next(errorHandler(404, 'User not found'));
-    const validPassword = bcryptjs.compareSync(password, validUser.password);
-    if (!validPassword) return next(errorHandler(401, 'wrong credentials'));
-    const token = jwt.sign({ id: validUser._id }, process.env.JWT_SECRET);
-    const { password: hashedPassword, ...rest } = validUser._doc;
-    const expiryDate = new Date(Date.now() + 3600000); // 1 hour
-    res
-      .cookie('access_token', token, { httpOnly: true, expires: expiryDate })
-      .status(200)
-      .json(rest);
+      const {email, password} = req.body;
+      const user = await User.findOne({email});
+      const isPasswordCorect = await bcrypt.compare(password, user?.password || "")
+      
+      if(!email || !isPasswordCorect){
+          return res.status(400).json({error: "Invalid email or password"});
+      };
+
+      res.status(200).json({message: "Login succesfuly! "});
+
   } catch (error) {
-    next(error);
+    res.status(400).json({ error: error.message });
   }
 };
-
 
 
 export const signout = (req, res) => {
-  res.clearCookie('access_token').status(200).json('Signout success!');
+  res.clearCookie('access_token').status(200).json('Logout success!');
 };

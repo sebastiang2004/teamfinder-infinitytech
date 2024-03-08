@@ -11,11 +11,14 @@ const userSchema = new mongoose.Schema(
       type: String,
       required: true,
       unique: true,
+      default:'',
+
     },
     address: {
       type: String,
       required: true,
       unique: true,
+      default:'',
     },
     email: {
       type: String,

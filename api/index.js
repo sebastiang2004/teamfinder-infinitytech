@@ -1,10 +1,16 @@
-import express from 'express';
+import express from "express";
 import mongoose from 'mongoose';
 import dotenv from 'dotenv';
-import userRoutes from './routes/user.route.js';
-import authRoutes from './routes/auth.route.js';
 import cookieParser from 'cookie-parser';
 import path from 'path';
+
+import userRoutes from './routes/user.route.js';
+import authRoutes from './routes/auth.route.js';
+import departamentRoutes from './routes/departments.js';
+import employeeRoutes from './routes/employee.js';
+
+
+
 dotenv.config();
 
 mongoose
@@ -36,6 +42,10 @@ app.listen(3000, () => {
 
 app.use('/api/user', userRoutes);
 app.use('/api/auth', authRoutes);
+app.use('/api/departament', departamentRoutes);
+app.use('/api/employee', employeeRoutes);
+
+
 
 app.use((err, req, res, next) => {
   const statusCode = err.statusCode || 500;
