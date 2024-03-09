@@ -34,6 +34,17 @@ const userSchema = new mongoose.Schema(
       default:
         '',
     },
+    roles:
+     [{ type: String, 
+      enum: ['Employee', 'Organization Admin', 'Department Manager', 'Project Manager']
+     }],
+    skills:
+     [{ type: String 
+    }],
+    projects:
+     [{ type: mongoose.Schema.Types.ObjectId, ref: 'Project'
+    
+    }],
   },
   { timestamps: true }
 );
