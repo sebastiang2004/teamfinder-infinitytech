@@ -1,4 +1,3 @@
-// models/skill.js
 import mongoose from 'mongoose';
 
 const skillSchema = mongoose.Schema({

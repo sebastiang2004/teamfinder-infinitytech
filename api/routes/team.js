@@ -1,6 +1,6 @@
 // routes/teams.js
 import express from 'express';
-import { getAllTeams, createTeam } from '../controllers/teams.js';
+import { getAllTeams, createTeam } from '../controllers/team.js';
 
 const router = express.Router();
 

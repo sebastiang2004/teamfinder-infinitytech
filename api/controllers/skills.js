@@ -1,9 +1,10 @@
 // controllers/skills.js
-import Skill from '../models/skill.js';
+import Skill from '../models/skills.js';
 
 export const createSkill = async (req, res) => {
   const { category, name, description, author, departments } = req.body;
 
+  // Create a new skill
   const newSkill = new Skill({
     category,
     name,
@@ -20,6 +21,8 @@ export const createSkill = async (req, res) => {
   }
 };
 
+
+//  Update a skill
 export const updateSkill = async (req, res) => {
   const { id } = req.params;
   const { category, name, description, author, departments } = req.body;
@@ -32,6 +35,8 @@ export const updateSkill = async (req, res) => {
   }
 };
 
+
+// Delete a skill
 export const deleteSkill = async (req, res) => {
   const { id } = req.params;
 

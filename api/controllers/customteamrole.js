@@ -1,6 +1,7 @@
 
-import TeamRole from '../models/teamRole.js';
+import TeamRole from '../models/team.js';
 
+// Create a new team role
 export const createTeamRole = async (req, res) => {
   const { name, organization } = req.body;
 
@@ -17,6 +18,7 @@ export const createTeamRole = async (req, res) => {
   }
 };
 
+// Update a team role
 export const updateTeamRole = async (req, res) => {
   const { id } = req.params;
   const { name, organization } = req.body;

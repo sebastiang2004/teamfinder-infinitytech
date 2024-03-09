@@ -13,7 +13,7 @@ export const getEmployeeById = async(req, res) =>{
         res.status(500).json({error: error.message});
     }
 }
-
+// Update employee's skills
 export const updateSkills = async(req, res) =>{
     try {
     const employee = await Employee.findById(req.params.id);
@@ -28,7 +28,7 @@ export const updateSkills = async(req, res) =>{
         res.status(500).json({error: error.message});
     }
 }
-
+// View employee's projects
 export const viewProjects = async(req, res) =>{
    try {
     const employee = await Employee.findById(req.params.id).populate("projects");
@@ -42,6 +42,7 @@ export const viewProjects = async(req, res) =>{
     }
 }
 
+// Update employee project
 export const updateProjects = async(req, res) =>{
     try {
      const employee = await Employee.findById(req.params.id).populate("projects");
@@ -58,6 +59,7 @@ export const updateProjects = async(req, res) =>{
 
 }
 
+//affilitate sign up
 export const signupEmployee = async (req, res) => {
     const organization = await Organization.findOne({ identifier: req.params.orgIdentifier });
     if (!organization) {

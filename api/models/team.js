@@ -10,13 +10,13 @@ const teamSchema = new mongoose.Schema({
   members: [
     {
       type: mongoose.Schema.Types.ObjectId,
-      ref: 'Employee', // Assuming you have an Employee model
+      ref: 'Employee', 
     },
   ],
   projects: [
     {
       type: mongoose.Schema.Types.ObjectId,
-      ref: 'Project', // Assuming you have a Project model
+      ref: 'Project',
     },
   ],
 });

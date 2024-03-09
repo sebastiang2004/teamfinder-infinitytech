@@ -76,7 +76,7 @@ export const signup = async(req, res) =>{
   }
 };
 
-
+// Login
 export const login = async(req, res) =>{
   try {
       const {email, password} = req.body;
@@ -94,7 +94,7 @@ export const login = async(req, res) =>{
   }
 };
 
-
+// Logout
 export const signout = (res) => {
   res.clearCookie('access_token').status(200).json('Logout success!');
 };

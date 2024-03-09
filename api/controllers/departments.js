@@ -1,5 +1,7 @@
 import Department from '../models/departments.js';
 import User from '../models/user.model.js';
+
+// Assign a Department Member
 export const assignDepartmentMember = async (req, res) => {
   const { id } = req.params;
   const { userId } = req.body;
@@ -12,6 +14,8 @@ export const assignDepartmentMember = async (req, res) => {
   }
 };
 
+
+// Remove a Department Member
 export const removeDepartmentMember = async (req, res) => {
   const { userId } = req.params;
 
@@ -23,6 +27,8 @@ export const removeDepartmentMember = async (req, res) => {
   }
 };
 
+
+// Assign a Department Manager
 export const assignDepartmentManager = async (req, res) => {
   const { id } = req.params;
   const { manager } = req.body;

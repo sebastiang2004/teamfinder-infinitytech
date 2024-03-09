@@ -9,6 +9,16 @@ import authRoutes from './routes/auth.route.js';
 import departamentRoutes from './routes/departments.js';
 import employeeRoutes from './routes/employee.js';
 
+
+
+import customTeamRoleRoutes from './routes/customteamroles.js';
+
+import organizationRoutes from './routes/organizations.js';
+import projectRoutes from './routes/projects.js';
+import proposeAssignmentRoutes from './routes/proposeAssignment.js';
+import roleRoutes from './routes/roles.js';
+import skillRoutes from './routes/skills.js';
+import teamRoutes from './routes/team.js';
 dotenv.config();
 
 mongoose
@@ -42,7 +52,10 @@ app.use('/api/user', userRoutes);
 app.use('/api/auth', authRoutes);
 app.use('/api/departament', departamentRoutes);
 app.use('/api/employee', employeeRoutes);
-
+app.use('/api/role', roleRoutes);
+app.use('/api/organization', organizationRoutes);
+app.use('/api/project', projectRoutes);
+app.use('/api/proposeAssignment', proposeAssignmentRoutes);
 
 
 app.use((err, req, res, next) => {

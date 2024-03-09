@@ -1,4 +1,4 @@
-import Project from '../models/project.js';
+import Project from '../models/projects.js';
 
 // Get all projects
 export const getProjects = async (req, res) => {
@@ -15,8 +15,23 @@ export const getProjectById = async (req, res) => {
 export const createProject = async (req, res) => {
   const { name, period, startDate, deadlineDate, status, description, technologyStack, teamRoles } = req.body;
 
-  if (['In Progress', 'Closing', 'Closed'].includes(status)) {
+  // Validate period
+  if (!['Fixed', 'Ongoing'].includes(period)) {
+    return res.status(400).json({ message: 'Invalid period' });
+  }
+
+  // Validate status
+  if (!['Not Started', 'Starting', 'In Progress', 'Closing', 'Closed'].includes(status)) {
     return res.status(400).json({ message: 'Invalid status' });
+  }
+
+  if (['In Progress', 'Closing', 'Closed'].includes(status)) {
+    return res.status(400).json({ message: 'Invalid status for project creation' });
+  }
+
+  // Validate deadlineDate
+  if (period === 'Fixed' && !deadlineDate) {
+    return res.status(400).json({ message: 'Deadline date is required for fixed period projects' });
   }
 
   const newProject = new Project({
@@ -34,7 +49,7 @@ export const createProject = async (req, res) => {
     await newProject.save();
     res.status(201).json(newProject);
   } catch (error) {
-    res.status(400).json({ message: error.message });
+    res.status(409).json({ message: error.message });
   }
 };
 
@@ -65,4 +80,8 @@ export const deleteProject = async (req, res) => {
   } catch (error) {
     res.status(400).json({ message: error.message });
   }
+};
+
+export const proposeAssignment = async (req, res) => {
+  // Your code here
 };
