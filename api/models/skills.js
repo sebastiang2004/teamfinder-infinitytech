@@ -1,18 +1,13 @@
+// models/skill.js
 import mongoose from 'mongoose';
 
-const skillSchema = new mongoose.Schema(
-  {
-    name: {
-      type: String,
-      required: true,
-      unique: true,
-    },
-    description: {
-      type: String,
-    },
-  },
-  { timestamps: true }
-);
+const skillSchema = mongoose.Schema({
+  category: String,
+  name: String,
+  description: String,
+  author: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
+  departments: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Department' }],
+});
 
 const Skill = mongoose.model('Skill', skillSchema);
 

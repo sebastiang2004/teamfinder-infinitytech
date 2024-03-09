@@ -7,6 +7,29 @@ export const test = (req, res) => {
     message: 'API is working!',
   });
 };
+// assign skill
+export const assignSkill = async (req, res) => {
+  const { id } = req.params;
+  const { skill, level, experience } = req.body;
+
+  try {
+    const updatedUser = await User.findByIdAndUpdate(id, { $push: { skills: { skill, level, experience } } }, { new: true });
+    res.status(200).json(updatedUser);
+  } catch (error) {
+    res.status(400).json({ message: error.message });
+  }
+};
+
+export const viewSkills = async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const user = await User.findById(id).populate('skills.skill');
+    res.status(200).json(user.skills);
+  } catch (error) {
+    res.status(400).json({ message: error.message });
+  }
+};
 
 // get user
 export const getUser = async (req, res) => {

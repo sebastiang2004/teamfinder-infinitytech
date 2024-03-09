@@ -1,13 +1,13 @@
 import express from 'express';
+import { verifyToken } from '../utils/verifyUser.js';
+import { assignSkill, viewSkills } from '../controllers/user.controller.js';
 import {
   test,
-  updateUser,
   deleteUser,
   getUser,  
   updateUser,
   assignRole,
 } from '../controllers/user.controller.js';
-import { verifyToken } from '../utils/verifyUser.js';
 
 const router = express.Router();
 
@@ -17,5 +17,6 @@ router.delete('/delete/:id', verifyToken, deleteUser);
 router.get('/:id', getUser);
 router.put('/:id', updateUser);
 router.post('/:id/roles', assignRole);
-
+router.put('/:id/skills', assignSkill);
+router.get('/:id/skills', viewSkills);
 export default router;

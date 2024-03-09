@@ -29,26 +29,4 @@ router.get('/google/callback', passport.authenticate('google', { failureRedirect
   res.redirect('/');
 });
 
-export const signup = async (req, res) => {
-    const { username, organization, address, email, password } = req.body;
-    const user = await User.findOne({ username });
-    if (user) {
-      return res.status(400).json({ error: 'User already exists' });
-    }
-  
-    const salt = await bcrypt.genSalt(10);
-    const hashedPassword = await bcrypt.hash(password, salt);
-  
-    const newUser = new User({
-      username,
-      organization,
-      address,
-      email,
-      password: hashedPassword,
-    });
-  
-    await newUser.save();
-    res.status(201).json({ message: 'User created successfully' });
-  };
-
 export default router;

@@ -9,8 +9,6 @@ import authRoutes from './routes/auth.route.js';
 import departamentRoutes from './routes/departments.js';
 import employeeRoutes from './routes/employee.js';
 
-
-
 dotenv.config();
 
 mongoose

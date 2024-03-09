@@ -12,21 +12,57 @@ export const getProjectById = async (req, res) => {
   res.json(project);
 };
 
-// Create a new project
 export const createProject = async (req, res) => {
-  const newProject = new Project(req.body);
-  await newProject.save();
-  res.status(201).json(newProject);
+  const { name, period, startDate, deadlineDate, status, description, technologyStack, teamRoles } = req.body;
+
+  if (['In Progress', 'Closing', 'Closed'].includes(status)) {
+    return res.status(400).json({ message: 'Invalid status' });
+  }
+
+  const newProject = new Project({
+    name,
+    period,
+    startDate,
+    deadlineDate,
+    status,
+    description,
+    technologyStack,
+    teamRoles,
+  });
+
+  try {
+    await newProject.save();
+    res.status(201).json(newProject);
+  } catch (error) {
+    res.status(400).json({ message: error.message });
+  }
 };
 
 // Update a project
 export const updateProject = async (req, res) => {
-  const updatedProject = await Project.findByIdAndUpdate(req.params.id, req.body, { new: true });
-  res.json(updatedProject);
-};
+  const { id } = req.params;
+  const { name, period, startDate, deadlineDate, status, description, technologyStack, teamRoles } = req.body;
 
+  try {
+    const updatedProject = await Project.findByIdAndUpdate(id, { name, period, startDate, deadlineDate, status, description, technologyStack, teamRoles }, { new: true });
+    res.status(200).json(updatedProject);
+  } catch (error) {
+    res.status(400).json({ message: error.message });
+  }
+};
 // Delete a project
 export const deleteProject = async (req, res) => {
-  await Project.findByIdAndDelete(req.params.id);
-  res.json({ message: 'Project deleted' });
+  const { id } = req.params;
+
+  const project = await Project.findById(id);
+  if (['In Progress', 'Closing', 'Closed'].includes(project.status)) {
+    return res.status(400).json({ message: 'Cannot delete project' });
+  }
+
+  try {
+    await Project.findByIdAndRemove(id);
+    res.status(200).json({ message: 'Project deleted successfully.' });
+  } catch (error) {
+    res.status(400).json({ message: error.message });
+  }
 };

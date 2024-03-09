@@ -1,18 +1,10 @@
 import mongoose from 'mongoose';
 
-const departmentSchema = new mongoose.Schema(
-  {
-    name: {
-      type: String,
-      required: true,
-      unique: true,
-    },
-    description: {
-      type: String,
-    },
-  },
-  { timestamps: true }
-);
+const departmentSchema = mongoose.Schema({
+  name: String,
+  organization: { type: mongoose.Schema.Types.ObjectId, ref: 'Organization' },
+  manager: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
+});
 
 const Department = mongoose.model('Department', departmentSchema);
 

@@ -2,7 +2,7 @@
 
 import express  from "express";
 import{getEmployeeById, updateSkills, viewProjects, updateProjects} from "../controllers/employee.js";
-import { signupEmployee } from '../controllers/auth.controller.js';
+import { signupEmployee } from '../controllers/employee.js';
 
 const router = express.Router();
 

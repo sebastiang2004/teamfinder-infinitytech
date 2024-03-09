@@ -1,7 +1,17 @@
 import express from 'express';
-import Department from './departments';
+import Department from './departments.js';
+import { assignDepartmentManager } from '../controllers/departments.js';
 
+import { assignDepartmentMember, removeDepartmentMember } from '../controllers/departments.js';
 const router = express.Router();
+
+
+// Assign a member to a department
+router.put('/:id/members', assignDepartmentMember);
+router.delete('/:id/members/:userId', removeDepartmentMember);
+
+// Assign a manager to a department
+router.put('/:id/manager', assignDepartmentManager);
 
 // Get all departments
 router.get('/departments', async (req, res) => {

@@ -1,10 +1,13 @@
 import passport from 'passport';
-import LinkedInStrategy from 'passport-linkedin-oauth2';
-import GitHubStrategy from 'passport-github2';
-import GoogleStrategy from 'passport-google-oauth20';
+import { Strategy as LinkedInStrategy } from 'passport-linkedin-oauth2';
+import { Strategy as GitHubStrategy } from 'passport-github2';
+import { OAuth2Strategy as GoogleStrategy } from 'passport-google-oauth';
+
 import User from '../models/user.model.js';
 import bcrypt from 'bcryptjs';
+import dotenv from 'dotenv';
 
+dotenv.config();
 // LinkedIn Strategy
 passport.use(new LinkedInStrategy({
   clientID: process.env.LINKEDIN_CLIENT_ID,
@@ -13,7 +16,6 @@ passport.use(new LinkedInStrategy({
   scope: ['r_emailaddress', 'r_liteprofile'],
 }, function(accessToken, refreshToken, profile, done) {
   // Find or create user in your database
-
 }));
 
 // GitHub Strategy
@@ -23,7 +25,6 @@ passport.use(new GitHubStrategy({
   callbackURL: "http://localhost:3000/auth/github/callback"
 }, function(accessToken, refreshToken, profile, done) {
   // Find or create user in your database
-
 }));
 
 // Google Strategy
@@ -33,7 +34,6 @@ passport.use(new GoogleStrategy({
   callbackURL: "http://localhost:3000/auth/google/callback"
 }, function(accessToken, refreshToken, profile, done) {
   // Find or create user in your database
-
 }));
 
 export const signup = async(req, res) =>{
