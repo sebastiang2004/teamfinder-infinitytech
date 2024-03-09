@@ -1,7 +1,7 @@
 // controllers/employee.js
 
 import Employee from "../models/employee.js";
-
+import Organization from '../models/organizations.js';
 export const getEmployeeById = async(req, res) =>{
     try {
         const employee = await Employee.findById(req.params.id);
@@ -55,9 +55,18 @@ export const updateProjects = async(req, res) =>{
     }catch (error) {
         res.status(500).json = ({error: error.message});
      }
+
 }
 
-
+export const signupEmployee = async (req, res) => {
+    const organization = await Organization.findOne({ identifier: req.params.orgIdentifier });
+    if (!organization) {
+      return res.status(404).json({ error: 'Organization not found' });
+    }
+  
+    // Render the sign-up form with organization pre-filled
+    res.render('signup', { organization });
+  };
 
 
 
