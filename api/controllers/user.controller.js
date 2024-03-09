@@ -8,8 +8,13 @@ export const test = (req, res) => {
   });
 };
 
-// update user
+// get user
+export const getUser = async (req, res) => {
+  const user = await User.findById(req.params.id);
+  res.json(user);
+};
 
+// update user
 export const updateUser = async (req, res, next) => {
   if (req.user.id !== req.params.id) {
     return next(errorHandler(401, 'You can update only your account!'));
@@ -19,29 +24,34 @@ export const updateUser = async (req, res, next) => {
       req.body.password = bcryptjs.hashSync(req.body.password, 10);
     }
 
-    const updatedUser = await User.findByIdAndUpdate(
-      req.params.id,
-      {
-        $set: {
-          username: req.body.username,
-          email: req.body.email,
-          password: req.body.password,
-          profilePicture: req.body.profilePicture,
-        },
-      },
-      { new: true }
-    );
-    const { password, ...rest } = updatedUser._doc;
-    res.status(200).json(rest);
+    const updatedUser = await User.findByIdAndUpdate(req.params.id, req.body, { new: true });
+    res.json(updatedUser);
   } catch (error) {
     next(error);
   }
 };
 
+// assign role
+export const assignRole = async (req, res) => {
+  const user = await User.findById(req.params.id);
+  if (!user) {
+    return res.status(404).json({ message: 'User not found' });
+  }
+
+  const { role } = req.body;
+  if (!['Employee', 'Organization Admin', 'Department Manager', 'Project Manager'].includes(role)) {
+    return res.status(400).json({ message: 'Invalid role' });
+  }
+
+  if (!user.roles.includes(role)) {
+    user.roles.push(role);
+    await user.save();
+  }
+
+  res.json(user);
+};
 
 // delete user
-
-
 export const deleteUser = async (req, res, next) => {
   if (req.user.id !== req.params.id) {
     return next(errorHandler(401, 'You can delete only your account!'));
@@ -52,5 +62,4 @@ export const deleteUser = async (req, res, next) => {
   } catch (error) {
     next(error);
   }
-
-}
+};
