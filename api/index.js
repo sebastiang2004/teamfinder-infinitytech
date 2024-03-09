@@ -14,7 +14,7 @@ import employeeRoutes from './routes/employee.js';
 dotenv.config();
 
 mongoose
-  .connect('mongodb://localhost:27017')
+  .connect(process.env.MONGO_URI)
   .then(() => {
     console.log('Connected to MongoDB-InfinityCluster0');
   })
@@ -28,7 +28,7 @@ const app = express();
 
 app.use(express.static(path.join(__dirname, '/client/dist')));
 
-app.get('*', (req, res) => {
+app.get('*', (_, res) => {
   res.sendFile(path.join(__dirname, 'client', 'dist', 'index.html'));
 });
 
