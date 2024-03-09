@@ -1,27 +1,34 @@
-// controllers/departments.js
 import Department from '../models/departments.js';
 
-export const getAllDepartments = async (req, res) => {
+// Get a department by ID
+export const getDepartmentById = async (req, res) => {
   try {
-    const departments = await Department.find();
-    res.status(200).json(departments);
+    const department = await Department.findById(req.params.id);
+    if (!department) return res.status(404).json({ message: 'Department not found' });
+    res.status(200).json(department);
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
 };
 
-export const createDepartment = async (req, res) => {
-  const { name, description } = req.body;
-
-  const newDepartment = new Department({
-    name,
-    description,
-  });
-
+// Update a department
+export const updateDepartment = async (req, res) => {
   try {
-    await newDepartment.save();
-    res.status(201).json(newDepartment);
+    const updatedDepartment = await Department.findByIdAndUpdate(req.params.id, req.body, { new: true });
+    if (!updatedDepartment) return res.status(404).json({ message: 'Department not found' });
+    res.status(200).json(updatedDepartment);
   } catch (error) {
     res.status(400).json({ message: error.message });
+  }
+};
+
+// Delete a department
+export const deleteDepartment = async (req, res) => {
+  try {
+    const deletedDepartment = await Department.findByIdAndDelete(req.params.id);
+    if (!deletedDepartment) return res.status(404).json({ message: 'Department not found' });
+    res.status(200).json(deletedDepartment);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
   }
 };
