@@ -1,7 +1,40 @@
+import passport from 'passport';
+import LinkedInStrategy from 'passport-linkedin-oauth2';
+import GitHubStrategy from 'passport-github2';
+import GoogleStrategy from 'passport-google-oauth20';
 import User from '../models/user.model.js';
 import bcrypt from 'bcryptjs';
-// import { errorHandler } from '../utils/error.js';
-// import jwt from 'jsonwebtoken';
+
+// LinkedIn Strategy
+passport.use(new LinkedInStrategy({
+  clientID: process.env.LINKEDIN_CLIENT_ID,
+  clientSecret: process.env.LINKEDIN_CLIENT_SECRET,
+  callbackURL: "http://localhost:3000/auth/linkedin/callback",
+  scope: ['r_emailaddress', 'r_liteprofile'],
+}, function(accessToken, refreshToken, profile, done) {
+  // Find or create user in your database
+
+}));
+
+// GitHub Strategy
+passport.use(new GitHubStrategy({
+  clientID: process.env.GITHUB_CLIENT_ID,
+  clientSecret: process.env.GITHUB_CLIENT_SECRET,
+  callbackURL: "http://localhost:3000/auth/github/callback"
+}, function(accessToken, refreshToken, profile, done) {
+  // Find or create user in your database
+
+}));
+
+// Google Strategy
+passport.use(new GoogleStrategy({
+  clientID: process.env.GOOGLE_CLIENT_ID,
+  clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+  callbackURL: "http://localhost:3000/auth/google/callback"
+}, function(accessToken, refreshToken, profile, done) {
+  // Find or create user in your database
+
+}));
 
 export const signup = async(req, res) =>{
   try {
@@ -62,6 +95,6 @@ export const login = async(req, res) =>{
 };
 
 
-export const signout = (req, res) => {
+export const signout = (res) => {
   res.clearCookie('access_token').status(200).json('Logout success!');
 };
