@@ -4,7 +4,11 @@
 # https://aka.ms/yaml
 
 trigger:
-- master
+  branches:
+    exclude:
+    - '*'
+
+pr: none
 
 pool:
   vmImage: ubuntu-latest
@@ -17,3 +21,11 @@ steps:
     echo Add other tasks to build, test, and deploy your project.
     echo See https://aka.ms/yaml
   displayName: 'Run a multi-line script'
+
+- task: AzureRmWebAppDeployment@4
+  inputs:
+    ConnectionType: 'AzureRM'
+    azureSubscription: 'Your Azure Subscription' # replace with your Azure subscription
+    appType: 'webApp'
+    WebAppName: 'Your Web App Name' # replace with your web app name
+    packageForLinux: '$(Build.ArtifactStagingDirectory)/**/*.zip' # replace with the path to your package
