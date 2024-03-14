@@ -9,6 +9,35 @@ export const getOrganizations = async (req, res) => {
   }
 };
 
+export const getOrganization = async (req, res) => {
+  const userId = req.params.id
+
+  try {
+    const organization = await Organization.find({
+      manager: userId
+    })
+
+    if(!organization) {
+      return res.status(404).json({
+        success: false,
+        message: "Organization not found"
+      })
+    }
+
+
+    res.status(200).json({
+      success: true,
+      organization
+    })
+
+  } catch(error) {
+    req.status(500).json({
+      success: false,
+      message: error.message
+    })
+  }
+}
+
 export const createOrganization = async (req, res) => {
   const organization = new Organization(req.body);
   try {

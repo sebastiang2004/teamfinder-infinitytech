@@ -1,23 +1,26 @@
 import jwt from 'jsonwebtoken';
+import User from '../models/user.model.js';
 
-const authMiddleware = (req, res, next) => {
-  // Get token from header
-  const token = req.header('x-auth-token');
+export const authenticateToken = async (req, res, next) => {
+    const authHeader = req.headers['authorization'];
+    const token = authHeader && authHeader.split(' ')[1]; // "Bearer TOKEN"
 
-  // Check if not token
-  if (!token) {
-    return res.status(401).json({ msg: 'No token, authorization denied' });
-  }
+    if (token == null) {
+        return res.status(401).json({ message: 'No token provided' });
+    }
 
-  // Verify token
-  try {
-    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    try {
+        const decoded = jwt.verify(token, process.env.JWT_SECRET);
+        
+        const user = await User.findById(decoded.userId);
+        if (!user) {
+            return res.status(404).json({ message: 'User not found' });
+        }
 
-    req.user = decoded.user;
-    next();
-  } catch (err) {
-    res.status(401).json({ msg: 'Token is not valid' });
-  }
+        req.user = user;
+
+        next(); 
+    } catch (error) {
+        return res.status(403).json({ message: 'Invalid or expired token' });
+    }
 };
-
-export default authMiddleware;

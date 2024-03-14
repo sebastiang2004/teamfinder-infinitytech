@@ -1,5 +1,4 @@
 import express from 'express';
-import { verifyToken } from '../utils/verifyUser.js';
 import { assignSkill, viewSkills } from '../controllers/user.controller.js';
 import {
   test,
@@ -8,14 +7,16 @@ import {
   updateUser,
   assignRole,
 } from '../controllers/user.controller.js';
+import { getOrganization } from '../controllers/organizations.js';
 
 const router = express.Router();
 
 router.get('/', test);
-router.post('/update/:id', verifyToken, updateUser);
-router.delete('/delete/:id', verifyToken, deleteUser);
+router.post('/update/:id', updateUser);
+router.delete('/delete/:id', deleteUser);
 router.get('/:id', getUser);
 router.put('/:id', updateUser);
+router.get('/:id/organization', getOrganization)
 router.post('/:id/roles', assignRole);
 router.put('/:id/skills', assignSkill);
 router.get('/:id/skills', viewSkills);

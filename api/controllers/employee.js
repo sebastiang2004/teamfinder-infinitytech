@@ -52,7 +52,7 @@ export const updateProjects = async(req, res) =>{
     employee.projects = req.body.projects;
     await employee.save();
     res.json(employee);
-    
+
     }catch (error) {
         res.status(500).json = ({error: error.message});
      }
@@ -65,7 +65,7 @@ export const signupEmployee = async (req, res) => {
     if (!organization) {
       return res.status(404).json({ error: 'Organization not found' });
     }
-  
+
     // Render the sign-up form with organization pre-filled
     res.render('signup', { organization });
   };
@@ -74,7 +74,7 @@ export const signupEmployee = async (req, res) => {
 
 
 
-    
+
 
 
 
