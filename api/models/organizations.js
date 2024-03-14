@@ -3,7 +3,7 @@ import { v4 as uuidv4 } from "uuid";
 
 const organizationSchema = new mongoose.Schema(
   {
-    name: { type: String, required: true, unique: true },
+    name: { type: String, required: true },
     address: { type: String, required: true },
     manager: {
       type: mongoose.Schema.Types.ObjectId,

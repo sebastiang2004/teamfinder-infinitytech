@@ -32,7 +32,7 @@ passport.use(new GitHubStrategy({
     if (!user) {
       user = new User({
         githubId: profile.id,
-        username: profile.username || 'Unknown',
+        name: profile.username || 'Unknown',
         organization: profile.company || '',
         email: profile?.emails?.[0].value,
         address: '',
@@ -67,11 +67,11 @@ export const verifyToken = async(req, res) => {
 
 export const signup = async (req, res) => {
   try {
-    const {username, organization_name, organization_address, email, password} = req.body;
+    const {name, organization_name, organization_address, email, password} = req.body;
     console.log(req.body)
       // Poti adauga mai multa validare, am verificat doar daca field-urile sunt prezente. Ar trebui sa verifici lungimea si tipul lor ca sa fim safe.
 
-    if(!username || !organization_name || !organization_address || !email || !password) {
+    if(!name || !organization_name || !organization_address || !email || !password) {
       return res.status(400).json({
         error: true,
         messsage: "All fields are required (username, organization_name, organization_address, email, password)"
@@ -96,7 +96,7 @@ export const signup = async (req, res) => {
 
 
     const newUser = new User({
-      username: username,
+      name: name,
       organization: newOrganization._id,
       email: email,
       password: hashedPassword,
@@ -119,7 +119,7 @@ export const signup = async (req, res) => {
       { expiresIn: '24h' }
     )
     res.status(201).json({
-      username: newUser.username,
+      email: newUser.email,
       token
     })
 
@@ -140,7 +140,7 @@ export const login = async (req, res) => {
     const user = await User.findOne({email});
     const isPasswordCorect = await bcrypt.compare(password, user?.password || "")
 
-    if (!email || !isPasswordCorect) {
+    if (!email || !isPasswordCorect || !user) {
       return res.status(400).json({error: "Invalid email or password"});
     }
 
@@ -159,7 +159,7 @@ export const login = async (req, res) => {
     )
 
     res.status(201).json({
-      username: user.username,
+      email: user.email,
       token
     })
 

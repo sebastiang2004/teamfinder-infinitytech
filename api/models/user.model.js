@@ -8,10 +8,9 @@ const skillSchema = mongoose.Schema({
 
 const userSchema = new mongoose.Schema(
   {
-    username: {
+    name: {
       type: String,
       required: true,
-      unique: true,
     },
     organization: {
       type: mongoose.Schema.Types.ObjectId,
@@ -31,7 +30,7 @@ const userSchema = new mongoose.Schema(
       type: String,
       default: '',
     },
-    role: { 
+    role: {
       type: String,
       enum: ['Employee', 'Organization Admin', 'Department Manager', 'Project Manager'],
       required: true
