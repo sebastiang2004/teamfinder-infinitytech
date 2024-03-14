@@ -111,6 +111,7 @@ export const signup = async (req, res) => {
     const token = jwt.sign(
       {
         userId: newUser._id,
+        organizationId: newOrganization._id,
         email: newUser.email,
         role: newUser.role
       },
@@ -141,11 +142,15 @@ export const login = async (req, res) => {
 
     if (!email || !isPasswordCorect) {
       return res.status(400).json({error: "Invalid email or password"});
-    };
+    }
+
+    const organization = await Organization.findOne({ manager: user._id });
+
 
     const token = jwt.sign(
       {
         userId: user._id,
+        organizationId: organization._id,
         email: user.email,
         role: user.role
       },
