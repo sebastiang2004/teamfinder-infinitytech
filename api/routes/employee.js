@@ -7,16 +7,16 @@ import { signupEmployee } from '../controllers/employee.js';
 const router = express.Router();
 
 // Get employee by ID
-router.get("/", getEmployeeById);
+router.get("/:id", getEmployeeById);
 
 // Update employee skills
-router.put("/", updateSkills);
+router.put("/:id/skills", updateSkills);
 
 // View employee's projects
-router.get("/", viewProjects);
+router.get("/:id/projects", viewProjects);
 
 // Update employee's projects
-router.put("/", updateProjects);
+router.put("/:id/projects", updateProjects);
 
 // Sign Up Employee ref
 router.get('/signup/:orgIdentifier', signupEmployee)

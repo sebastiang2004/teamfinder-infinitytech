@@ -1,5 +1,5 @@
 import express from 'express';
-import Department from './departments.js';
+import Department from '../models/departments.js'
 import { assignDepartmentManager } from '../controllers/departments.js';
 
 import { assignDepartmentMember, removeDepartmentMember } from '../controllers/departments.js';

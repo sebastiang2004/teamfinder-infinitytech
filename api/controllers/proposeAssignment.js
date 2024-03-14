@@ -1,5 +1,5 @@
 import Employee from '../models/employee.js';
-import Project from '../models/project.js';
+import Project from '../models/projects.js';
 
 export const proposeAssignment = async (req, res) => {
   const { projectId, employeeId, workHours, roles, comments } = req.body;

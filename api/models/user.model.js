@@ -14,18 +14,11 @@ const userSchema = new mongoose.Schema(
       unique: true,
     },
     organization: {
-      type: String,
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Organization',
       required: true,
-      unique: true,
-      default:'',
+    },
 
-    },
-    address: {
-      type: String,
-      required: true,
-      unique: true,
-      default:'',
-    },
     email: {
       type: String,
       required: true,
@@ -33,26 +26,25 @@ const userSchema = new mongoose.Schema(
     },
     password: {
       type: String,
-      required: true,
     },
     profilePicture: {
       type: String,
-      default:
-        '',
+      default: '',
     },
-    roles:
-     [{ type: String, 
-      enum: ['Employee', 'Organization Admin', 'Department Manager', 'Project Manager']
-     }],
-     skills: [skillSchema],
-    projects:
-     [{ type: mongoose.Schema.Types.ObjectId, ref: 'Project'
-    
-    }],
+    role: { 
+      type: String,
+      enum: ['Employee', 'Organization Admin', 'Department Manager', 'Project Manager'],
+      required: true
+    },
+    skills: [skillSchema],
+    projects: [
+      { type: mongoose.Schema.Types.ObjectId, ref: 'Project' }
+    ],
     department: { type: mongoose.Schema.Types.ObjectId, ref: 'Department' },
   },
   { timestamps: true }
 );
+
 
 const User = mongoose.model('User', userSchema);
 
