@@ -7,6 +7,7 @@ import User from '../models/user.model.js';
 import bcrypt from 'bcryptjs';
 import dotenv from 'dotenv';
 import jwt from 'jsonwebtoken';
+import { JWT_SECRET } from '../constants.js';
 
 dotenv.config();
 // LinkedIn Strategy
@@ -108,6 +109,7 @@ export const signup = async (req, res) => {
     newOrganization.manager = newUser._id
     await newOrganization.save();
 
+    
     const token = jwt.sign(
       {
         userId: newUser._id,
@@ -115,7 +117,7 @@ export const signup = async (req, res) => {
         email: newUser.email,
         role: newUser.role
       },
-      process.env.JWT_SECRET,
+      JWT_SECRET,
       { expiresIn: '24h' }
     )
     res.status(201).json({
@@ -154,7 +156,7 @@ export const login = async (req, res) => {
         email: user.email,
         role: user.role
       },
-      process.env.JWT_SECRET,
+      JWT_SECRET,
       { expiresIn: '24h' }
     )
 
