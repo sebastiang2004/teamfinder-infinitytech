@@ -2,8 +2,7 @@
 
 import express  from "express";
 import{getEmployeeById, updateSkills, viewProjects, updateProjects} from "../controllers/employee.js";
-import { signupEmployee } from '../controllers/employee.js';
-
+import { signup } from "../controllers/employee.js";
 const router = express.Router();
 
 // Get employee by ID
@@ -19,6 +18,6 @@ router.get("/:id/projects", viewProjects);
 router.put("/:id/projects", updateProjects);
 
 // Sign Up Employee ref
-router.get('/signup/:orgIdentifier', signupEmployee)
+router.get('/signup', signup); // 
 
 export default router;
