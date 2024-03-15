@@ -50,8 +50,8 @@ app.use(express.json());
 
 app.use(cookieParser());
 
-app.listen(4000, () => {
-  console.log('Server listening on port 4000');
+app.listen(8080, () => {
+  console.log('Server listening on port 8080');
 });
 
 app.use('/api/user', authenticateToken, userRoutes);
