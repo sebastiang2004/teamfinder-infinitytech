@@ -9,7 +9,11 @@ export const getOrganizations = async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 };
-
+export const getSignupURL = (req, res) => {
+  const organizationId = req.user.organizationId;
+  const signupURL = `${req.protocol}://${req.get('host')}/api/employees/signup?organizationId=${organizationId}`;
+  res.json({ signupURL });
+};
 export const getOrganizationDepartments = async (req, res) => {
 
   if(!req.params.id) {
