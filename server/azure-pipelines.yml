@@ -22,6 +22,18 @@ steps:
     echo See https://aka.ms/yaml
   displayName: 'Run a multi-line script'
 
+  - script: |
+    cd client
+    npm install
+    npm run build
+  displayName: 'Build Client'
+
+- script: |
+    cd server
+    npm install
+    npm run build
+  displayName: 'Build Server'
+
 - task: AzureRmWebAppDeployment@4
   inputs:
     ConnectionType: 'AzureRM'
