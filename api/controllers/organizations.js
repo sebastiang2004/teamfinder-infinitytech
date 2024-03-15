@@ -1,3 +1,4 @@
+import Department from '../models/departments.js';
 import Organization from '../models/organizations.js';
 
 export const getOrganizations = async (req, res) => {
@@ -8,6 +9,22 @@ export const getOrganizations = async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 };
+
+export const getOrganizationDepartments = async (req, res) => {
+
+  if(!req.params.id) {
+    return res.status(400).json({
+      message: "Id is required"
+    })
+  }
+
+  try {
+    const departments = await Department.find({organization: req.params.id})
+    res.status(200).json(departments)
+  } catch (error) {
+    res.status(500).json({ message: error.message })
+  }
+}
 
 export const getOrganization = async (req, res) => {
   const userId = req.params.id
