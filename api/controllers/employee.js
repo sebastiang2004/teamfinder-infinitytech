@@ -59,19 +59,35 @@ export const updateProjects = async(req, res) =>{
 
 }
 
-//affilitate sign up
-export const signupEmployee = async (req, res) => {
-    const organization = await Organization.findOne({ identifier: req.params.orgIdentifier });
-    if (!organization) {
-      return res.status(404).json({ error: 'Organization not found' });
+export const signup = async (req, res) => {
+    const { organizationId } = req.query;
+    const { name, email, password } = req.body;
+  
+    try {
+      // Check if an employee with the same email already exists
+      let employee = await Employee.findOne({ email });
+      if (employee) {
+        return res.status(400).json({ msg: 'Employee already exists' });
+      }
+  
+      // Create a new employee
+      employee = new Employee({
+        name,
+        email,
+        password, // Password will be hashed in the model
+        organization: organizationId
+      });
+  
+      // Save the employee
+      await employee.save();
+  
+      res.json({ msg: 'Employee created successfully' });
+    } catch (err) {
+      console.error(err.message);
+      res.status(500).send('Server error');
     }
-
-    // Render the sign-up form with organization pre-filled
-    res.render('signup', { organization });
+    
   };
-
-
-
 
 
 
