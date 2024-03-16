@@ -4,7 +4,7 @@ const doc = {
     title: "My API",
     description: "Description",
   },
-  host: "localhost:3000/",
+  host: "https://atc-2024-infinitytech-be-linux-web-app.azurewebsites.net/",
 };
 
 const outputFile = "./swagger-output.json";
