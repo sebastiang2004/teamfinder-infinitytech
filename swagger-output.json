@@ -17,7 +17,7 @@
       "Bearer": []
     }
   ],
-  "host": "localhost:8080",
+  "host": "atc-2024-infinitytech-be-linux-web-app.azurewebsites.net",
   "basePath": "/",
   "schemes": [
     "http"
