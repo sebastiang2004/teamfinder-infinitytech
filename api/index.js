@@ -17,29 +17,37 @@ import roleRoutes from "./routes/roles.js";
 import skillRoutes from "./routes/skills.js";
 import teamRoutes from "./routes/team.js";
 import { authenticateToken } from "./middlewares/authmiddleware.js";
-import swaggerJsdoc from "swagger-jsdoc";
 import swaggerUi from "swagger-ui-express";
 import swaggerFile from "../swagger-output.json"  with { type: "json" };
 dotenv.config();
 
-mongoose
-  .connect(process.env.MONGO_URI)
-  .then(() => {
-    console.log("Connected to MongoDB-InfinityCluster0");
-  })
-  .catch((err) => {
-    console.log(err);
-  });
-
-const __dirname = path.resolve();
-
 const app = express();
-
+const __dirname = path.resolve();
 app.use(express.static(path.join(__dirname, "/client/dist")));
 
-// app.get('*', (_, res) => {
-//   res.sendFile(path.join(__dirname, 'client', 'dist', 'index.html'));
-// });
+app.use((err, _req, res, _next) => {
+  const statusCode = err.statusCode || 500;
+  const message = err.message || "Internal Server Error";
+  return res.status(statusCode).json({
+    success: false,
+    message,
+    statusCode,
+  });
+});
+
+const PORT = process.env.PORT || 8080;
+
+mongoose
+  .connect(process.env.MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true })
+  .then(() => {
+    console.log("Connected to MongoDB-InfinityCluster0");
+    app.listen(PORT, () => {
+      console.log(`Server listening on port ${PORT}`);
+    });
+  })
+  .catch((err) => {
+    console.error('Error connecting to MongoDB', err);
+  });
 
 app.use(helmet());
 
@@ -66,18 +74,3 @@ app.use("/api/customTeamRole", authenticateToken, customTeamRoleRoutes);
 app.use("/api/skill", authenticateToken, skillRoutes);
 app.use("/api/team", authenticateToken, teamRoutes);
 app.use('/doc', swaggerUi.serve,swaggerUi.setup(swaggerFile));
-
-app.listen(8080, () => {
-  console.log("Server listening on port 8080");
-});
-
-
-app.use((err, req, res, next) => {
-  const statusCode = err.statusCode || 500;
-  const message = err.message || "Internal Server Error";
-  return res.status(statusCode).json({
-    success: false,
-    message,
-    statusCode,
-  });
-});
