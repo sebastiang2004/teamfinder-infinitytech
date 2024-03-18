@@ -1,10 +1,12 @@
 // controllers/employee.js
+import { JWT_SECRET } from '../constants.js';
+import User from '../models/user.model.js';
+import jwt from 'jsonwebtoken';
+import bcrypt from 'bcryptjs';
 
-import Employee from "../models/employee.js";
-import Organization from '../models/organizations.js';
 export const getEmployeeById = async(req, res) =>{
     try {
-        const employee = await Employee.findById(req.params.id);
+        const employee = await User.findById(req.params.id);
         if(!employee){
             return res.status(400).json({error: "Employee not found!"});
         }
@@ -16,7 +18,7 @@ export const getEmployeeById = async(req, res) =>{
 // Update employee's skills
 export const updateSkills = async(req, res) =>{
     try {
-    const employee = await Employee.findById(req.params.id);
+    const employee = await User.findById(req.params.id);
         if(!employee){
             return res.status(400).json({error: "Employee not found!"});
         }
@@ -45,7 +47,7 @@ export const viewProjects = async(req, res) =>{
 // Update employee project
 export const updateProjects = async(req, res) =>{
     try {
-     const employee = await Employee.findById(req.params.id).populate("projects");
+     const employee = await User.findById(req.params.id).populate("projects");
          if(!employee){
              return res.status(400).json({error: "Employee not found!"});
          }
@@ -60,31 +62,46 @@ export const updateProjects = async(req, res) =>{
 }
 
 export const signup = async (req, res) => {
-    const { organizationId } = req.query;
-    const { name, email, password } = req.body;
+    const { name, email, password, organizationId } = req.body;
   
     try {
       // Check if an employee with the same email already exists
-      let employee = await Employee.findOne({ email });
+      let employee = await User.findOne({ email });
       if (employee) {
         return res.status(400).json({ msg: 'Employee already exists' });
       }
   
+
+      const salt = await bcrypt.genSalt(10);
+      const hashedPassword = await bcrypt.hash(password, salt);
       // Create a new employee
-      employee = new Employee({
+      employee = new User({
         name,
         email,
-        password, // Password will be hashed in the model
-        organization: organizationId
+        hashedPassword, // Password will be hashed in the model
+        organization: organizationId,
+        role: "Employee"
       });
   
       // Save the employee
       await employee.save();
+
+
+      const token = jwt.sign(
+        {
+          userId: employee._id,
+          organizationId: organizationId,
+          email: employee.email,
+          role: employee.role
+        },
+        JWT_SECRET,
+        { expiresIn: '24h' }
+      )
   
-      res.json({ msg: 'Employee created successfully' });
+      res.json({ msg: 'Employee created successfully', token });
     } catch (err) {
       console.error(err.message);
-      res.status(500).send('Server error');
+      res.status(500).send({error: err.message});
     }
     
   };

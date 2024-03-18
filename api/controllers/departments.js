@@ -1,6 +1,68 @@
 import Department from '../models/departments.js';
+import Skill from '../models/skills.js';
 import User from '../models/user.model.js';
 
+
+
+// get department skills
+
+export const getDepartmentSkills = async(req, res) => {
+  const { id } = req.params
+  if(!id) {
+    return res.status(400).json({
+      error: "id field is required"
+    })
+  }
+
+  try {
+    const skills = await Skill.find({
+      departments: id
+    })
+
+    res.status(200).json(skills)
+  } catch(error) {
+    res.status(400).json({ message: error.message });
+  }
+
+}
+// get department manager 
+export const getDepartmentManager = async(req, res) => {
+  const { id } = req.params
+
+  if(!id) {
+    return res.status(400).json({
+      error: "id field is required"
+    })
+  }
+  try {
+      const manager = await User.findOne({
+        department: id,
+        role: "Department Manager"
+      })
+      res.status(200).json(manager)
+  } catch(error) {
+    res.status(400).json({ message: error.message });
+
+  }
+}
+export const getDepartmentMembers = async (req, res) => {
+  const { id } = req.params
+
+  if(!id) {
+    return res.status(400).json({
+      error: "id field is required"
+    })
+  }
+  try {
+      const members = await User.find({
+        department: id
+      })
+      res.status(200).json(members)
+  } catch(error) {
+    res.status(400).json({ message: error.message });
+
+  }
+}
 // Assign a Department Member
 export const assignDepartmentMember = async (req, res) => {
   const { id } = req.params;

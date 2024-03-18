@@ -1,4 +1,5 @@
 import Department from '../models/departments.js';
+import User from '../models/user.model.js';
 import Organization from '../models/organizations.js';
 
 export const getOrganizations = async (req, res) => {
@@ -9,6 +10,18 @@ export const getOrganizations = async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 };
+export const getOrganizationById = async (req, res) => {
+  
+  try {
+    if(!req.params.id) {
+      return res.status(400).json({message: "id must be present"})
+    }
+    const organization = await Organization.findById(req.params.id);
+    res.status(200).json(organization);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+}
 export const getSignupURL = (req, res) => {
   const organizationId = req.user.organizationId;
   const signupURL = `${req.protocol}://${req.get('host')}/api/employees/signup?organizationId=${organizationId}`;
@@ -25,6 +38,24 @@ export const getOrganizationDepartments = async (req, res) => {
   try {
     const departments = await Department.find({organization: req.params.id})
     res.status(200).json(departments)
+  } catch (error) {
+    res.status(500).json({ message: error.message })
+  }
+}
+
+export const getOrganizationMembers = async (req, res) => {
+
+  if(!req.params.id) {
+    return res.status(400).json({
+      message: "Id is required"
+    })
+  }
+
+  try {
+    const members = await User.find({
+      organization: req.params.id
+    }).populate("department");
+    res.status(200).json(members)
   } catch (error) {
     res.status(500).json({ message: error.message })
   }

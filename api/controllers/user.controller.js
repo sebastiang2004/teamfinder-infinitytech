@@ -47,7 +47,7 @@ export const updateUser = async (req, res, next) => {
       req.body.password = bcryptjs.hashSync(req.body.password, 10);
     }
 
-    const updatedUser = await User.findByIdAndUpdate(req.params.id, req.body, { new: true });
+    const updatedUser = await User.findByIdAndUpdate(req.params.id, req.body, { new: true }).populate("department");
     res.json(updatedUser);
   } catch (error) {
     next(error);
@@ -76,8 +76,8 @@ export const assignRole = async (req, res) => {
 
 // delete user
 export const deleteUser = async (req, res, next) => {
-  if (req.user.id !== req.params.id) {
-    return next(errorHandler(401, 'You can delete only your account!'));
+  if (req.user.id === req.params.id) {
+    return next(errorHandler(401, 'You can not delete your account!'));
   }
   try {
     await User.findByIdAndDelete(req.params.id);

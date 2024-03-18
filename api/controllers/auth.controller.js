@@ -59,8 +59,8 @@ passport.use(new GitHubStrategy({
 
 
 
-export const verifyToken = async(req, res) => {
-  res.stastus(200).json({
+export const verifyToken = async (req, res) => {
+  res.status(200).json({
     message: 'Token is valid',
     user: req.user
   })
