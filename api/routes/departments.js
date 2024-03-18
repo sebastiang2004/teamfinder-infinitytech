@@ -14,13 +14,13 @@ router.get('/:id/members', getDepartmentMembers)
 router.delete('/:id/members/:userId', removeDepartmentMember);
 
 // Assign a manager to a department
-router.put('/:id/manager', assignDepartmentManager);
+router.put("/:id/manager", assignDepartmentManager);
 
 // Get a manager
 router.get('/:id/manager', getDepartmentManager)
 
 // Get all departments
-router.get('/', async (req, res) => {
+router.get("/", async (req, res) => {
   const departments = await Department.find();
   res.json(departments);
 });
@@ -32,20 +32,24 @@ router.get('/:id', async (req, res) => {
 });
 
 // Create a new department
-router.post('/', async (req, res) => {
+router.post("/", async (req, res) => {
   const newDepartment = new Department(req.body);
   const savedDepartment = await newDepartment.save();
   res.json(savedDepartment);
 });
 
 // Update a department
-router.put('/:id', async (req, res) => {
-  const updatedDepartment = await Department.findByIdAndUpdate(req.params.id, req.body, {new: true});
+router.put("/:id", async (req, res) => {
+  const updatedDepartment = await Department.findByIdAndUpdate(
+    req.params.id,
+    req.body,
+    { new: true }
+  );
   res.json(updatedDepartment);
 });
 
 // Delete a department
-router.delete('/:id', async (req, res) => {
+router.delete("/:id", async (req, res) => {
   const deletedDepartment = await Department.findByIdAndDelete(req.params.id);
   res.json(deletedDepartment);
 });
