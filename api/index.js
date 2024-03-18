@@ -44,12 +44,10 @@ app.use(express.static(path.join(__dirname, "/client/dist")));
 
 app.use(helmet());
 
-app.use(
-  cors({
-    origin: "any",
-    credentials: true,
-  })
-);
+app.use(cors({
+  origin:["http://localhost:5173", "http://localhost:4173", "https://teamfinder-infinitytech-yz1j.vercel.app"],
+  credentials: true,
+}))
 
 app.use(express.json());
 
@@ -72,6 +70,17 @@ app.listen(8080, () => {
   console.log("Server listening on port 8080");
 });
 
+app.use('/api/user', authenticateToken, userRoutes);
+app.use('/api/auth', authRoutes);
+app.use('/api/department', authenticateToken, departmentRoutes);
+app.use('/api/employee', employeeRoutes);
+app.use('/api/role', authenticateToken, roleRoutes);
+app.use('/api/organization', organizationRoutes);
+app.use('/api/project', authenticateToken, projectRoutes);
+app.use('/api/proposeAssignment', authenticateToken, proposeAssignmentRoutes);
+app.use('/api/customTeamRole', authenticateToken, customTeamRoleRoutes);
+app.use('/api/skill', authenticateToken, skillRoutes);
+app.use('/api/team', authenticateToken, teamRoutes);
 
 app.use((err, req, res, next) => {
   const statusCode = err.statusCode || 500;

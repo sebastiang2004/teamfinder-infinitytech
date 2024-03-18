@@ -24,6 +24,11 @@ const employeeSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+    organization: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Organization',
+      required: true,
+    },
     skills: [
       {
         type: mongoose.Schema.Types.ObjectId,

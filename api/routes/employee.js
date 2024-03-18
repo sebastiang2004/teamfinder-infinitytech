@@ -18,6 +18,6 @@ router.get("/:id/projects", viewProjects);
 router.put("/:id/projects", updateProjects);
 
 // Sign Up Employee ref
-router.get('/signup', signup); // 
+router.post('/signup', signup); // 
 
 export default router;

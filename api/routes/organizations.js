@@ -1,5 +1,5 @@
 import express from 'express';
-import { getOrganizations, createOrganization, getOrganizationDepartments } from '../controllers/organizations.js';
+import { getOrganizations, createOrganization, getOrganizationDepartments, getOrganizationById, getOrganizationMembers } from '../controllers/organizations.js';
 
 const router = express.Router();
 
@@ -13,8 +13,10 @@ const getSignupURL = (req, res, next) => {
 };
 
 router.get('/', getOrganizations);
+router.get('/:id', getOrganizationById)
 router.post('/', createOrganization);
 router.get('/signup-url', getSignupURL);
 router.get("/:id/departments", getOrganizationDepartments )
+router.get("/:id/members", getOrganizationMembers )
 
 export default router;
